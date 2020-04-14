@@ -101,6 +101,19 @@ class AppendTest extends TestCase
         $this->assertEquals(['allowed append'], $exception->allowedAppends->all());
     }
 
+    /** @test */
+    public function it_can_append_attributes_to_paginator()
+    {
+        $paginator = $this
+            ->createQueryFromAppendRequest('fullname')
+            ->allowedAppends('fullname')
+            ->paginate(10);
+
+        collect($paginator->items())->each(function ($model) {
+            $this->assertAttributeLoaded($model, 'fullname');
+        });
+    }
+
     protected function createQueryFromAppendRequest(string $appends): QueryBuilder
     {
         $request = new Request([
@@ -112,6 +125,6 @@ class AppendTest extends TestCase
 
     protected function assertAttributeLoaded(AppendModel $model, string $attribute)
     {
-        $this->assertTrue(array_key_exists($attribute, $model->toArray()));
+        $this->assertArrayHasKey($attribute, $model->toArray());
     }
 }

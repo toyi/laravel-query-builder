@@ -28,7 +28,10 @@ class AllowedInclude
 
     public static function relationship(string $name, ?string $internalName = null): Collection
     {
-        $internalName = $internalName ?? $name;
+       $internalName = $internalName ?? $name;
+       if(Str::contains($internalName, '-')){
+           $internalName = Str::camel($internalName ?? $name);
+       }
 
         return IncludedRelationship::getIndividualRelationshipPathsFromInclude($internalName)
             ->zip(IncludedRelationship::getIndividualRelationshipPathsFromInclude($name))

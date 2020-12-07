@@ -62,10 +62,11 @@ class FiltersExact implements Filter
         [$relation, $property] = collect(explode('.', $property))
             ->pipe(function (Collection $parts) {
                 return [
-                    $parts->except(count($parts) - 1)->map(function($part){
-                        if(Str::contains($part, '-')){
+                    $parts->except(count($parts) - 1)->map(function ($part) {
+                        if (Str::contains($part, '-')) {
                             $part = Str::camel($part);
                         }
+
                         return $part;
                     })->implode('.'),
                     $parts->last(),
